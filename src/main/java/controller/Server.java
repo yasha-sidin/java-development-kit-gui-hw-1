@@ -3,6 +3,7 @@ package controller;
 import factories.ColorFactory;
 import factories.FontFactory;
 import model.FileModel;
+import model.Message;
 import model.iGetModel;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class Server extends JFrame {
     private static final int WINDOW_POSY = 300;
     private final JLabel mainLabel;
     private final JLabel statusLabel;
-    private final List<ClientFrame> clientsList = new LinkedList<>();
+    private final List<Client> clientsList = new LinkedList<>();
     private final iGetModel<String> model;
     private boolean isActive = false;
     public Server(iGetModel<String> model) {
@@ -63,7 +64,6 @@ public class Server extends JFrame {
 
         add(mainPanel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.SOUTH);
-
         setVisible(true);
     }
 
@@ -75,12 +75,31 @@ public class Server extends JFrame {
         return isActive;
     }
 
-    public static void main(String[] args) throws IOException {
-        iGetModel<String> model = new FileModel("src/main/resources/data.txt");
-        Server server = new Server(model);
+    public boolean connect(String name, String password) {
+        Client client = new Client(name, password);
+        return contains(client);
     }
 
-    public void addClient(ClientFrame client) {
-        clientsList.add(client);
+    private boolean contains(Client client) {
+        for(Client client1 : clientsList) {
+            if (client1.isEqual(client)) return true;
+        }
+        return false;
+    }
+
+    public void addClient(Client client) {
+        if (!contains(client)) {
+            clientsList.add(client);
+            return;
+        }
+        throw new RuntimeException("Already exists");
+    }
+
+    public List<String> getMessages() throws IOException {
+        return model.getModel();
+    }
+
+    public void addMessage(Message message) {
+        model.setData(message.toString());
     }
 }

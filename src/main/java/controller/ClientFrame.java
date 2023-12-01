@@ -2,13 +2,15 @@ package controller;
 
 import javax.print.attribute.standard.JobMessageFromOperator;
 import javax.swing.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ClientFrame extends JFrame {
     private static final int WINDOW_HEIGHT = 500;
     private static final int WINDOW_WIDTH = 450;
     private static final int WINDOW_POSX = 800;
     private static final int WINDOW_POSY = 300;
-    private static boolean isConnectedToServer = false;
+    private static List<String> messages = new LinkedList<>();
     private final Server server;
     private final Client client;
 
@@ -19,13 +21,15 @@ public class ClientFrame extends JFrame {
         setLocation(WINDOW_POSX, WINDOW_POSY);
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         setResizable(false);
+
+
+        pack();
+        setVisible(true);
     }
 
-    public void setStatus(boolean serverStatus) {
-        isConnectedToServer = serverStatus;
-    }
+
 
     private void checkStatus() {
-        if (!isConnectedToServer) J
+        if (!client.isIsConnectedToServer()) JOptionPane.showMessageDialog(this, "Can't connect to server.", "Server error", JOptionPane.ERROR_MESSAGE);
     }
 }

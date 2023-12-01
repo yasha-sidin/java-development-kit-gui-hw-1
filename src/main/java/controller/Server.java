@@ -18,7 +18,7 @@ public class Server extends JFrame {
     private static final int WINDOW_POSY = 300;
     private final JLabel mainLabel;
     private final JLabel statusLabel;
-    private final List<Client> clientsList = new LinkedList<>();
+    private final List<ClientFrame> clientsList = new LinkedList<>();
     private final iGetModel<String> model;
     private boolean isActive = false;
     public Server(iGetModel<String> model) {
@@ -45,6 +45,7 @@ public class Server extends JFrame {
         buttonStart.addActionListener(e -> {
             isActive = true;
             statusLabel.setText("Server status: " + (isActive ? "on" : "off"));
+            clientsList.forEach(x -> x.setStatus(true));
         });
         buttonStart.setFont(FontFactory.getMain());
 
@@ -54,6 +55,7 @@ public class Server extends JFrame {
         buttonStop.addActionListener(e -> {
             isActive = false;
             statusLabel.setText("Server status: " + (isActive ? "on" : "off"));
+            clientsList.forEach(x -> x.setStatus(false));
         });
         buttonStop.setFont(FontFactory.getMain());
         buttonPanel.add(buttonStart);
@@ -78,7 +80,7 @@ public class Server extends JFrame {
         Server server = new Server(model);
     }
 
-    public void addClient(Client client) {
-
+    public void addClient(ClientFrame client) {
+        clientsList.add(client);
     }
 }

@@ -2,20 +2,16 @@ package controller;
 
 import factories.ColorFactory;
 import factories.FontFactory;
-import model.FileModel;
-import model.iGetModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class LoginFrame extends JFrame {
     private static final int WINDOW_HEIGHT = 400;
     private static final int WINDOW_WIDTH = 350;
-    private static final int WINDOW_POSX = 600;
-    private static final int WINDOW_POSY = 400;
+    private static final int WINDOW_POSX = 750;
+    private static final int WINDOW_POSY = 150;
     private JTextField textFieldLogin;
     private JPasswordField textFieldPassword;
     private Server server;
@@ -67,19 +63,20 @@ public class LoginFrame extends JFrame {
         buttonLogin.setFocusPainted(false);
         buttonLogin.setBackground(ColorFactory.getButtonsColor());
         buttonLogin.addActionListener(e -> {
-            initClient();
+            try {
+                initClient();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
         buttonsPanel.add(buttonLogin);
         JButton buttonExit = new JButton("Exit");
         buttonExit.setFont(FontFactory.getMain());
         buttonExit.setFocusPainted(false);
         buttonExit.setBackground(ColorFactory.getButtonsColor());
-        buttonExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                System.exit(0);
-            }
+        buttonExit.addActionListener(e -> {
+            setVisible(false);
+            System.exit(0);
         });
         buttonsPanel.add(buttonExit);
         add(buttonsPanel, BorderLayout.SOUTH);
@@ -88,13 +85,13 @@ public class LoginFrame extends JFrame {
         setVisible(true);
     }
 
-    private void initClient() {
+    private void initClient() throws IOException {
         if (!server.isActive()) {
             JOptionPane.showMessageDialog(this, "Can't connect to server.", "Server error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         String login = textFieldLogin.getText();
-        String password = textFieldPassword.getSelectedText();
+        String password = textFieldPassword.getText();
         textFieldLogin.setText("");
         textFieldPassword.setText("");
         if(login.isEmpty() || password.isEmpty()) {
@@ -108,11 +105,5 @@ public class LoginFrame extends JFrame {
             return;
         }
         JOptionPane.showMessageDialog(this, "Wrong login or password.", "Login error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void main(String[] args) throws IOException {
-        iGetModel<String> model = new FileModel("src/main/resources/data.txt");
-        Server server = new Server(model);
-        LoginFrame loginFrame = new LoginFrame(server);
     }
 }

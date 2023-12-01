@@ -28,7 +28,7 @@ public class FileModel implements iGetModel<String> {
     @Override
     public void setData(String data) {
         try(FileWriter fw = new FileWriter(modelFile, true)) {
-            fw.append(data);
+            fw.append(data).append(String.valueOf('\n'));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

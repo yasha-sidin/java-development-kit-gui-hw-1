@@ -2,7 +2,6 @@ package controller;
 
 import factories.ColorFactory;
 import factories.FontFactory;
-import model.FileModel;
 import model.Message;
 import model.iGetModel;
 
@@ -95,8 +94,10 @@ public class Server extends JFrame {
         throw new RuntimeException("Already exists");
     }
 
-    public List<String> getMessages() throws IOException {
-        return model.getModel();
+    public String getMessages() throws IOException {
+        StringBuilder sb = new StringBuilder();
+        model.getModel().forEach(x -> sb.append(x).append('\n'));
+        return sb.toString();
     }
 
     public void addMessage(Message message) {

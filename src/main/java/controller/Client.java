@@ -1,7 +1,5 @@
 package controller;
 
-import javax.swing.*;
-
 public class Client {
     private String login;
     private String password;
